@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,7 @@ namespace mastermind2PEMaikoVosWpf
         ComboBox[] guess = new ComboBox[4];
         Ellipse[] selectedEllipse = new Ellipse[4];
         string[] randomNumberColor = new string[4];
+        string[] naamInput = new string[4];
         bool bypassClosingGame = false;
         string randomColorSolution;
         int points = 100;
@@ -42,7 +44,7 @@ namespace mastermind2PEMaikoVosWpf
         /// <param name="e"> De gegevens van het event.</param>
         private void MainWindowLoader(object sender, RoutedEventArgs e)
         {
-            StartingGame();
+            StartGame();
             clicked = DateTime.Now;
             timer.Interval = TimeSpan.FromMilliseconds(1);
             timer.Tick += Timer_Tick;
@@ -97,12 +99,19 @@ namespace mastermind2PEMaikoVosWpf
         /// <summary>
         /// Start het spel door willekeurige kleuren te genereren, de oplossing vast te leggen en de spelstatus bij te werken.
         /// </summary>
-        private void StartingGame()
+        private void StartGame()
         {
             randomNumberColor[0] = PickingRandomColor(rnd.Next(0, 6));
             randomNumberColor[1] = PickingRandomColor(rnd.Next(0, 6));
             randomNumberColor[2] = PickingRandomColor(rnd.Next(0, 6));
             randomNumberColor[3] = PickingRandomColor(rnd.Next(0, 6));
+
+            string antwoord = Interaction.InputBox("Geef een naam in", "Invoer", "", 500);
+            while (string.IsNullOrEmpty(antwoord))
+            {
+                MessageBox.Show("Geef een getal in!", "Foutieve invoer");
+                antwoord = Interaction.InputBox("Geef een naam in", "Invoer", "", 500);
+            }
 
             randomColorSolution = $"{randomNumberColor[0]}, {randomNumberColor[1]}, {randomNumberColor[2]}, {randomNumberColor[3]}";
             totalScore.Content = $"Score: {points}/100";
@@ -263,7 +272,7 @@ namespace mastermind2PEMaikoVosWpf
                 makingNewEllipse.StrokeThickness = selectedEllipse[i].StrokeThickness;
                 makingNewEllipse.Height = 30;
                 makingNewEllipse.Width = 30;
-                makingNewEllipse.Margin = new Thickness(2.2);
+                makingNewEllipse.Margin = new Thickness(2);
 
                 Grid.SetRow(makingNewEllipse, rows);
                 Grid.SetColumn(makingNewEllipse, i);
@@ -298,41 +307,41 @@ namespace mastermind2PEMaikoVosWpf
         {
             if (attempts >= 10 && !CheckingIfWonGame())
             {
-                MessageBoxResult result = MessageBox.Show($"You failed, the code was {randomColorSolution}.\nWant to try again?", "Failed", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
-                {
-                    attempts = 0;
-                    points = 100;
-                    totalAttempts.Content = $"Attempts: {attempts}/10";
-                    addRows.Children.Clear();
-                    ClearingOutMainEllipse();
-                    StartingGame();
-                }
-                else
-                {
-                    bypassClosingGame = true;
-                    Close();
-                }
+                MessageBoxResult result = MessageBox.Show($"You failed, the code was {randomColorSolution}.", "Failed", MessageBoxButton.OK, MessageBoxImage.Information);
+                //if (result == MessageBoxResult.Yes)
+                //{
+                //    attempts = 0;
+                //    points = 100;
+                //    totalAttempts.Content = $"Attempts: {attempts}/10";
+                //    addRows.Children.Clear();
+                //    ClearingOutMainEllipse();
+                //    StartingGame();
+                //}
+                //else
+                //{
+                //    bypassClosingGame = true;
+                //    Close();
+                //}
             }
             else if (CheckingIfWonGame())
             {
-                MessageBoxResult result = MessageBox.Show($"You won in {attempts} attempts!\nWant to try again?", "WINNER", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                if (result == MessageBoxResult.Yes)
-                {
-                    attempts = 0;
-                    points = 100;
-                    totalAttempts.Content = $"Attempts: {attempts}/10";
-                    totalScore.Content = $"Score: {points}/100";
-                    addRows.Children.Clear();
-                    ClearingOutMainEllipse();
-                    StartingGame();
-                }
-                else
-                {
-                    bypassClosingGame = true;
-                    Close();
+                MessageBoxResult result = MessageBox.Show($"You won in {attempts} attempts!", "WINNER", MessageBoxButton.OK, MessageBoxImage.Information);
+                //if (result == MessageBoxResult.Yes)
+                //{
+                //    attempts = 0;
+                //    points = 100;
+                //    totalAttempts.Content = $"Attempts: {attempts}/10";
+                //    totalScore.Content = $"Score: {points}/100";
+                //    addRows.Children.Clear();
+                //    ClearingOutMainEllipse();
+                //    StartingGame();
+                //}
+                //else
+                //{
+                //    bypassClosingGame = true;
+                //    Close();
                     
-                }
+                //}
             }
         }
         /// <summary>
@@ -401,6 +410,22 @@ namespace mastermind2PEMaikoVosWpf
             {
                 e.Cancel = true;
             }
+        }
+
+        private void Afsluiten_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void NieuwSpel_Click(object sender, RoutedEventArgs e)
+        {
+            attempts = 0;
+            points = 100;
+            totalAttempts.Content = $"Attempts: {attempts}/10";
+            totalScore.Content = $"Score: {points}/100";
+            addRows.Children.Clear();
+            ClearingOutMainEllipse();
+            StartGame();
         }
     }
 }
