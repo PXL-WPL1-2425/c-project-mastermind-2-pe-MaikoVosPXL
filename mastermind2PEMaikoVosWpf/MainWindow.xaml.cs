@@ -27,6 +27,7 @@ namespace mastermind2PEMaikoVosWpf
         Ellipse[] selectedEllipse = new Ellipse[4];
         string[] randomNumberColor = new string[4];
         string[] naamInput = new string[4];
+        string[] highscores = new string[15];
         bool bypassClosingGame = false;
         string randomColorSolution;
         int points = 100;
@@ -106,12 +107,7 @@ namespace mastermind2PEMaikoVosWpf
             randomNumberColor[2] = PickingRandomColor(rnd.Next(0, 6));
             randomNumberColor[3] = PickingRandomColor(rnd.Next(0, 6));
 
-            string antwoord = Interaction.InputBox("Geef een naam in", "Invoer", "", 500);
-            while (string.IsNullOrEmpty(antwoord))
-            {
-                MessageBox.Show("Geef een getal in!", "Foutieve invoer");
-                antwoord = Interaction.InputBox("Geef een naam in", "Invoer", "", 500);
-            }
+            InputNaamAndAttempts();
 
             randomColorSolution = $"{randomNumberColor[0]}, {randomNumberColor[1]}, {randomNumberColor[2]}, {randomNumberColor[3]}";
             totalScore.Content = $"Score: {points}/100";
@@ -119,6 +115,37 @@ namespace mastermind2PEMaikoVosWpf
             showRandomColors.Text = randomColorSolution;
 
         }
+
+        private void InputNaamAndAttempts()
+        {
+            string inputNaam = Interaction.InputBox("Geef een naam in.", "Invoer", "", 500);
+            if (inputNaam != "")
+            {
+                MessageBox.Show("Geef een naam in!", "Foutieve invoer");
+                inputNaam = Interaction.InputBox("Geef een naam in.", "Invoer", "", 500);
+            }
+            while (string.IsNullOrEmpty(inputNaam))
+            {
+                MessageBox.Show("Geef een naam in!", "Foutieve invoer");
+                inputNaam = Interaction.InputBox("Geef een naam in.", "Invoer", "", 500);
+            }
+
+            string aantalPogingen = Interaction.InputBox("Geef een het aantal pogingen in 3-20.", "Invoer", "0", 500);
+            bool isValidAantalPogingen = int.TryParse(aantalPogingen, out int aantalPogingenNummer);
+            if (!isValidAantalPogingen || aantalPogingenNummer < 3 || aantalPogingenNummer > 20)
+            {
+                MessageBox.Show("Geef een getal!", "Foutieve invoer");
+                aantalPogingen = Interaction.InputBox("Geef een het aantal pogingen 3-20 in!", "Invoer", "0", 500);
+            }
+            while (isValidAantalPogingen && string.IsNullOrEmpty(aantalPogingen))
+            {
+                MessageBox.Show("Geef een getal!", "Foutieve invoer");
+                aantalPogingen = Interaction.InputBox("Geef een het aantal pogingen 3-20 in!", "Invoer", "0", 500);
+            }
+
+
+        }
+
         /// <summary>
         /// Aan de hand van de index word er een string aan de randomNumber gekoppelt.
         /// </summary>
