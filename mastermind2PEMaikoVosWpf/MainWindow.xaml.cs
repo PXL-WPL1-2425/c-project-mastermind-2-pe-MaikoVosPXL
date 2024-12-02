@@ -117,6 +117,7 @@ namespace mastermind2PEMaikoVosWpf
             totalScore.Content = $"Score: {points}/100";
             totalAttempts.Content = $"Attempts: {attempts}/10";
             showRandomColors.Text = randomColorSolution;
+
         }
         /// <summary>
         /// Aan de hand van de index word er een string aan de randomNumber gekoppelt.
@@ -308,40 +309,10 @@ namespace mastermind2PEMaikoVosWpf
             if (attempts >= 10 && !CheckingIfWonGame())
             {
                 MessageBoxResult result = MessageBox.Show($"You failed, the code was {randomColorSolution}.", "Failed", MessageBoxButton.OK, MessageBoxImage.Information);
-                //if (result == MessageBoxResult.Yes)
-                //{
-                //    attempts = 0;
-                //    points = 100;
-                //    totalAttempts.Content = $"Attempts: {attempts}/10";
-                //    addRows.Children.Clear();
-                //    ClearingOutMainEllipse();
-                //    StartingGame();
-                //}
-                //else
-                //{
-                //    bypassClosingGame = true;
-                //    Close();
-                //}
             }
             else if (CheckingIfWonGame())
             {
                 MessageBoxResult result = MessageBox.Show($"You won in {attempts} attempts!", "WINNER", MessageBoxButton.OK, MessageBoxImage.Information);
-                //if (result == MessageBoxResult.Yes)
-                //{
-                //    attempts = 0;
-                //    points = 100;
-                //    totalAttempts.Content = $"Attempts: {attempts}/10";
-                //    totalScore.Content = $"Score: {points}/100";
-                //    addRows.Children.Clear();
-                //    ClearingOutMainEllipse();
-                //    StartingGame();
-                //}
-                //else
-                //{
-                //    bypassClosingGame = true;
-                //    Close();
-                    
-                //}
             }
         }
         /// <summary>
